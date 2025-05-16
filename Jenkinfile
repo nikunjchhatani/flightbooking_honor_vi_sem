@@ -14,7 +14,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // ✅ Use 'main' branch of your GitHub repo
-                git branch: 'main', url: 'https://github.com/nikunjchhatani/flightbooking_honor_vi_sem.git'
+                git branch: 'main', url: 'https://github.com/nikunjchhatani/flightbooking_honor_vi_sem'
             }
         }
 
