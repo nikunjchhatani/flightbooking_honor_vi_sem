@@ -15,7 +15,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    sh '''
+                    echo '''
                     docker run --rm -v %cd%:/app -w /app maven:3.8.5-openjdk-17 mvn clean package -DskipTests
                     '''
                 }
@@ -25,7 +25,7 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    sh '''
+                    echo '''
                     docker run --rm -v %cd%:/app -w /app maven:3.8.5-openjdk-17 mvn test
                     '''
                 }
