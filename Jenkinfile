@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
                     bat """
-                    docker run --rm -v C:/ProgramData/Jenkins/.jenkins/workspace/flightbooking:/app -w /app/Flightbooking maven:3.8.5-openjdk-17 mvn test
+                    docker run --rm -u 0 -v C:/ProgramData/Jenkins/.jenkins/workspace/flightbooking:/app -w /app/Flightbooking maven:3.8.5-openjdk-17 mvn test
                     """
                 }
             }
