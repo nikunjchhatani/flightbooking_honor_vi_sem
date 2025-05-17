@@ -19,7 +19,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    echo """
+                    bat """
                     docker run --rm -u 0 -v C:/ProgramData/Jenkins/.jenkins/workspace/flightbooking:/app -w /app/Flightbooking maven:3.8.5-openjdk-17 mvn clean package -DskipTests
                     """
                 }
@@ -30,7 +30,7 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    echo """
+                    bat """
                     docker run --rm -u 0 -v C:/ProgramData/Jenkins/.jenkins/workspace/flightbooking:/app -w /app/Flightbooking maven:3.8.5-openjdk-17 mvn test
                     """
                 }
@@ -41,11 +41,12 @@ pipeline {
         stage('Deploy and Run on EC2') {
             steps {
                 bat """
-                powershell -Command "scp -o StrictHostKeyChecking=no -i '${PEM_PATH}' Flightbooking/target/${JAR_NAME} ${EC2_USER}@${EC2_HOST}:~/"
-                powershell -Command "ssh -o StrictHostKeyChecking=no -i '${PEM_PATH}' ${EC2_USER}@${EC2_HOST} 'pkill -f ${JAR_NAME} || true; nohup java -jar ${JAR_NAME} > app.log 2>&1 &'"
+                powershell -Command "scp -o StrictHostKeyChecking=no -i \\"${PEM_PATH}\\" Flightbooking/target/${JAR_NAME} ${EC2_USER}@${EC2_HOST}:~/"
+                powershell -Command "ssh -o StrictHostKeyChecking=no -i \\"${PEM_PATH}\\" ${EC2_USER}@${EC2_HOST} 'pkill -f ${JAR_NAME} || true; nohup java -jar ${JAR_NAME} > app.log 2>&1 &'"
                 """
             }
         }
+
 
     }
 }
