@@ -41,10 +41,11 @@ pipeline {
         stage('Deploy and Run on EC2') {
             steps {
                 bat """
-                powershell -Command "scp -o StrictHostKeyChecking=no -i '${PEM_PATH}' target/${JAR_NAME} ${EC2_USER}@${EC2_HOST}:~/"
+                powershell -Command "scp -o StrictHostKeyChecking=no -i '${PEM_PATH}' Flightbooking/target/${JAR_NAME} ${EC2_USER}@${EC2_HOST}:~/"
                 powershell -Command "ssh -o StrictHostKeyChecking=no -i '${PEM_PATH}' ${EC2_USER}@${EC2_HOST} 'pkill -f ${JAR_NAME} || true; nohup java -jar ${JAR_NAME} > app.log 2>&1 &'"
                 """
             }
         }
+
     }
 }
