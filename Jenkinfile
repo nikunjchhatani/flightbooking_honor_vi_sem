@@ -21,7 +21,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    bat """
+                    echo """
                     docker run --rm -u 0 ^
                         -v C:/ProgramData/Jenkins/.jenkins/workspace/flightbooking:/app ^
                         -w /app/Flightbooking ^
@@ -34,7 +34,7 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    bat """
+                    echo """
                     docker run --rm -u 0 ^
                         -v C:/ProgramData/Jenkins/.jenkins/workspace/flightbooking:/app ^
                         -w /app/Flightbooking ^
