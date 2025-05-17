@@ -43,6 +43,15 @@ pipeline {
             }
         }
 
+        stage('Build Docker Image') {
+                    steps {
+                        bat """
+                        cd ${WORKSPACE_DIR}
+                        docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} .
+                        """
+                    }
+                }
+
         stage('Deploy and Run on EC2') {
             steps {
                 withCredentials([file(credentialsId: 'flightbooking-key', variable: 'PEM_PATH')]) {
