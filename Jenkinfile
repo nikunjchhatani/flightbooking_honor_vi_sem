@@ -45,6 +45,7 @@ pipeline {
                 withCredentials([file(credentialsId: 'flightbooking-key', variable: 'PEM_PATH')]) {
                     script {
                         bat """
+                        for /f %%u in ('whoami') do set USERNAME=%%u
                         icacls "%PEM_PATH%" /inheritance:r
                         icacls "%PEM_PATH%" /grant:r "%USERNAME%:R"
                         """
@@ -59,6 +60,7 @@ pipeline {
                         """
                     }
                 }
+
             }
         }
     }
