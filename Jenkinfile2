@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE = 'nikunjchhatani/flightbooking:latest'
+        EC2_USER = 'ec2-user'
+        EC2_HOST = '35.175.140.93'
+        PEM_PATH = 'E:\\honors_vi_sem\\flightbooking_app\\flightbooking_key_pair.pem'
+        JAR_NAME = 'Flightbooking-0.0.1-SNAPSHOT.jar'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/nikunjchhatani/flightbooking_honor_vi_sem'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                bat """
+                    docker run --rm -v %cd%:/app -w /app maven:3.8.5-openjdk-17 mvn clean package -DskipTests
+                """
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat """
+                    docker run --rm -v %cd%:/app -w /app maven:3.8.5-openjdk-17 mvn test
+                """
+            }
+        }
+
+
+
+        stage('Deploy and Run on EC2') {
+            steps {
+                bat """
+                    powershell -Command "scp -o StrictHostKeyChecking=no -i '${PEM_PATH}' target/${JAR_NAME} ${EC2_USER}@${EC2_HOST}:~/"
+                    powershell -Command "ssh -o StrictHostKeyChecking=no -i '${PEM_PATH}' ${EC2_USER}@${EC2_HOST} 'pkill -f ${JAR_NAME} || true; nohup java -jar ${JAR_NAME} > app.log 2>&1 &'"
+                """
+            }
+        }
+    }
+}
