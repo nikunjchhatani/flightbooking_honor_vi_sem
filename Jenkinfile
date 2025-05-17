@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE = 'nikunjchhatani/flightbooking:latest'
-        PEM_PATH = 'C:/ProgramData/Jenkins/.ssh/flightbooking_key_pair.pem'  // update accordingly
+        PEM_PATH = 'E:/honors_vi_sem/flightbooking_app/flightbooking_key_pair.pem'  // update accordingly
         JAR_NAME = 'Flightbooking-0.0.1-SNAPSHOT.jar'  // update accordingly
         EC2_USER = 'ec2-user'
         EC2_HOST = '35.175.140.93'
