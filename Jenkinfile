@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     // Use bat or sh depending on your Jenkins agent OS
-                    echo """
+                    bat """
                     docker run --rm -v %cd%:/app -w /app ${IMAGE} mvn clean package -DskipTests
                     """
                 }
@@ -30,7 +30,7 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    echo """
+                    bat """
                     docker run --rm -v %cd%:/app -w /app ${IMAGE} mvn test
                     """
                 }
