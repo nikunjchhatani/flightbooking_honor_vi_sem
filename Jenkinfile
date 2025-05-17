@@ -21,7 +21,8 @@ pipeline {
                 script {
                     // Use bat or sh depending on your Jenkins agent OS
                     bat """
-                    docker run --rm -v %cd%:/app -w /app ${IMAGE} mvn clean package -DskipTests
+                    docker run --rm -v C:/ProgramData/Jenkins/.jenkins/workspace/flightbooking:/app -w /app maven:3.8.5-openjdk-17 mvn clean package -DskipTests
+
                     """
                 }
             }
