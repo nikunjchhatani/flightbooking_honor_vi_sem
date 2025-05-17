@@ -54,4 +54,16 @@ public class TicketController {
             return ResponseEntity.status(404).body("Ticket with ID " + id + " not found.");
         }
     }
+
+    // Permanently delete ticket by ID
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteTicketPermanently(@PathVariable String id) {
+        boolean isDeleted = ticketService.deleteTicketById(id);
+        if (isDeleted) {
+            return ResponseEntity.ok("Ticket with ID " + id + " has been permanently deleted.");
+        } else {
+            return ResponseEntity.status(404).body("Ticket with ID " + id + " not found.");
+        }
+    }
+
 }

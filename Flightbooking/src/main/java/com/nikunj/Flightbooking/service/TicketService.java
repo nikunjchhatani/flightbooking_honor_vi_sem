@@ -38,4 +38,14 @@ public class TicketService {
         }
         return false;  // Return false if ticket is not found
     }
+
+    public boolean deleteTicketById(String id) {
+        Optional<Ticket> ticketToDelete = tickets.stream()
+                .filter(ticket -> ticket.getId().equals(id))
+                .findFirst();
+
+        ticketToDelete.ifPresent(tickets::remove);
+        return ticketToDelete.isPresent();
+    }
+
 }
