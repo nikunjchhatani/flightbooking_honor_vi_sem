@@ -45,21 +45,23 @@ pipeline {
                 withCredentials([file(credentialsId: 'flightbooking-key', variable: 'PEM_PATH')]) {
                     script {
                         bat """
-                        for /f %%u in ('whoami') do set USERNAME=%%u
-                        icacls "%PEM_PATH%" /inheritance:r
-                        icacls "%PEM_PATH%" /grant:r "%USERNAME%:R"
+                        for /f "delims=" %%u in ('whoami') do (
+                            icacls "%PEM_PATH%" /inheritance:r
+                            icacls "%PEM_PATH%" /grant:r "%%u:R"
+                        )
                         """
 
                         bat """
                         scp -o StrictHostKeyChecking=no -i "%PEM_PATH%" ^
-                            Flightbooking/target/%JAR_NAME% %EC2_USER%@%EC2_HOST%:~/
+                            Flightbooking/target/Flightbooking-0.0.1-SNAPSHOT.jar ec2-user@35.175.140.93:~/
 
                         ssh -o StrictHostKeyChecking=no -i "%PEM_PATH%" ^
-                            %EC2_USER%@%EC2_HOST% ^
-                            "pkill -f %JAR_NAME% || true; nohup java -jar %JAR_NAME% > app.log 2>&1 &"
+                            ec2-user@35.175.140.93 ^
+                            "pkill -f Flightbooking-0.0.1-SNAPSHOT.jar || true; nohup java -jar Flightbooking-0.0.1-SNAPSHOT.jar > app.log 2>&1 &"
                         """
                     }
                 }
+
 
             }
         }
