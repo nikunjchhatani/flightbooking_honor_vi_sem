@@ -17,7 +17,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    bat """
+                    echo """
                     docker run --rm -u 0 ^
                         -v C:/ProgramData/Jenkins/.jenkins/workspace/flightbooking:/app ^
                         -w /app/Flightbooking ^
@@ -30,7 +30,7 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    bat """
+                    echo """
                     docker run --rm -u 0 ^
                         -v C:/ProgramData/Jenkins/.jenkins/workspace/flightbooking:/app ^
                         -w /app/Flightbooking ^
@@ -43,14 +43,21 @@ pipeline {
         stage('Deploy and Run on EC2') {
             steps {
                 withCredentials([file(credentialsId: 'flightbooking-key', variable: 'PEM_PATH')]) {
-                    bat """
-                    scp -o StrictHostKeyChecking=no -i "%PEM_PATH%" ^
-                        Flightbooking/target/%JAR_NAME% %EC2_USER%@%EC2_HOST%:~/
+                    script {
+                        bat """
+                        icacls "%PEM_PATH%" /inheritance:r
+                        icacls "%PEM_PATH%" /grant:r "%USERNAME%:R"
+                        """
 
-                    ssh -o StrictHostKeyChecking=no -i "%PEM_PATH%" ^
-                        %EC2_USER%@%EC2_HOST% ^
-                        "pkill -f %JAR_NAME% || true; nohup java -jar %JAR_NAME% > app.log 2>&1 &"
-                    """
+                        bat """
+                        scp -o StrictHostKeyChecking=no -i "%PEM_PATH%" ^
+                            Flightbooking/target/%JAR_NAME% %EC2_USER%@%EC2_HOST%:~/
+
+                        ssh -o StrictHostKeyChecking=no -i "%PEM_PATH%" ^
+                            %EC2_USER%@%EC2_HOST% ^
+                            "pkill -f %JAR_NAME% || true; nohup java -jar %JAR_NAME% > app.log 2>&1 &"
+                        """
+                    }
                 }
             }
         }
