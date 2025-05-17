@@ -19,9 +19,9 @@ pipeline {
         stage('Build') {
             steps {
                 bat """
-                    docker run --rm -v C:\ProgramData\Jenkins\.jenkins\workspace\flightbooking-test:/app -w /app/Flightbooking maven:3.8.5-openjdk-17 mvn clean package -DskipTests
-
+                    docker run --rm -v C:/ProgramData/Jenkins/.jenkins/workspace/flightbooking-test:/app -w /app/Flightbooking maven:3.8.5-openjdk-17 mvn clean package -DskipTests
                 """
+
             }
         }
 
